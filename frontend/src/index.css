@@ -1,2 +1,40 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+
+.menu-tabs {
+    position: relative;
+}
+.menu-tabs::after {
+    content: '';
+    right: -150px;
+    position: absolute;
+    width: 120px;
+    height: 1px;
+    border-top: 1px dotted #C19D60;
+}
+.menu-tabs::before {
+    content: '';
+    left: -150px;
+    position: absolute;
+    width: 120px;
+    height: 1px;
+    border-top: 1px dotted #C19D60;
+}
+
+.menu-tab-item {
+    position: relative;
+}
+
+.menu-tab-item.selected::before {
+    font-family: 'Font Awesome 5 Free'; 
+    content: "\f0d8";  /* Unicode for caret up */
+    position: absolute;
+    color: #C19D60;
+    top: 31px;
+    right: 50%;
+    font-size: 15px;
+    opacity: 0.8;
+    font-weight: 800;
+    transform: translateX(50%);
+    transition: opacity 0.3s ease;
+}

@@ -1,32 +1,59 @@
-// src/components/RestaurantMenu.jsx
-
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiSend, FiMessageSquare, FiX } from 'react-icons/fi'; // Optional: for icons
+import { gsap } from 'gsap';  // Import GSAP
+import { FiSend, FiMessageSquare, FiX } from 'react-icons/fi';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const RestaurantMenu = () => {
-    const { restaurantName } = useParams();
     const [restaurant, setRestaurant] = useState(null);
     const [chatOpen, setChatOpen] = useState(false);
     const [userMessage, setUserMessage] = useState('');
     const [chatResponses, setChatResponses] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('Appetizers');
     const chatEndRef = useRef(null);
 
     useEffect(() => {
-        fetch(`/api/restaurants/${restaurantName}/`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                setRestaurant(data);
-            })
-            .catch(error => console.error('Error fetching restaurant:', error));
-    }, [restaurantName]);
+        const staticRestaurant = {
+            name: 'Gourmet Heaven',
+            categories: [
+                {
+                    id: 1,
+                    name: 'Appetizers',
+                    meals: [
+                        { id: 1, name: 'Spring Rolls', description: 'Crispy fried rolls with vegetable filling', size: 'Medium', cost: 5.99 },
+                        { id: 2, name: 'Garlic Bread', description: 'Soft bread topped with garlic butter and herbs', size: 'Large', cost: 3.99 },
+                    ],
+                },
+                {
+                    id: 2,
+                    name: 'Main Courses',
+                    meals: [
+                        { id: 3, name: 'Grilled Chicken', description: 'Tender chicken breast grilled to perfection', size: 'Large', cost: 12.99 },
+                        { id: 4, name: 'Spaghetti Bolognese', description: 'Pasta with a rich, savory meat sauce', size: 'Medium', cost: 9.99 },
+                    ],
+                },
+                {
+                    id: 3,
+                    name: 'Desserts',
+                    meals: [
+                        { id: 5, name: 'Chocolate Lava Cake', description: 'Warm chocolate cake with a molten center', size: 'Small', cost: 6.99 },
+                        { id: 6, name: 'Cheesecake', description: 'Creamy cheesecake with a graham cracker crust', size: 'Large', cost: 7.99 },
+                    ],
+                },
+            ],
+        };
+
+        setRestaurant(staticRestaurant);
+    }, []);
 
     useEffect(() => {
-        scrollToBottom();
-    }, [chatResponses, isLoading]);
+        if (restaurant) {
+            gsap.fromTo(".menu-tab-item", 
+                { opacity: 0, y: -20 }, 
+                { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 }
+            );
+        }
+    }, [restaurant]);
 
     const toggleChat = () => {
         setChatOpen(!chatOpen);
@@ -39,32 +66,16 @@ const RestaurantMenu = () => {
         setChatResponses(prev => [...prev, { sender: 'user', message: userMessage }]);
 
         try {
-            const response = await fetch('/api/ai-recommendation/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    query: userMessage,
-                    restaurant: restaurantName,
-                }),
-            });
+            const recommendations = [
+                { name: 'Grilled Chicken', description: 'Tender chicken breast grilled to perfection', size: 'Large', cost: 12.99 },
+                { name: 'Spring Rolls', description: 'Crispy fried rolls with vegetable filling', size: 'Medium', cost: 5.99 },
+            ];
 
-            const data = await response.json();
-
-            if (response.ok) {
-                if (data.recommendations && Array.isArray(data.recommendations)) {
-                    setChatResponses(prev => [
-                        ...prev,
-                        { sender: 'ai', message: 'Here are some recommendations for you:' },
-                        ...data.recommendations.map(item => ({ sender: 'ai', message: JSON.stringify(item) }))
-                    ]);
-                } else {
-                    setChatResponses(prev => [...prev, { sender: 'ai', message: 'No recommendations found.' }]);
-                }
-            } else {
-                setChatResponses(prev => [...prev, { sender: 'ai', message: data.error }]);
-            }
+            setChatResponses(prev => [
+                ...prev,
+                { sender: 'ai', message: 'Here are some recommendations for you:' },
+                ...recommendations.map(item => ({ sender: 'ai', message: JSON.stringify(item) })),
+            ]);
         } catch (error) {
             console.error('Error fetching AI recommendation:', error);
             setChatResponses(prev => [...prev, { sender: 'ai', message: 'An error occurred. Please try again later.' }]);
@@ -78,13 +89,7 @@ const RestaurantMenu = () => {
         if (chat.sender === 'ai' && isJSON(chat.message)) {
             const item = JSON.parse(chat.message);
             return (
-                <motion.div
-                    key={index}
-                    className="mb-4"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                >
+                <div key={index} className="mb-4">
                     <div className="bg-blue-600 text-white p-4 rounded-lg shadow-md">
                         <h3 className="text-xl font-semibold">{item.name}</h3>
                         <p className="text-sm mt-2">{item.description}</p>
@@ -93,26 +98,21 @@ const RestaurantMenu = () => {
                             <span className="text-sm">Cost: ${item.cost}</span>
                         </div>
                     </div>
-                </motion.div>
+                </div>
             );
         } else {
             return (
-                <motion.div
+                <div
                     key={index}
                     className={`mb-2 flex ${chat.sender === 'ai' ? 'justify-start' : 'justify-end'}`}
-                    initial={{ opacity: 0, x: chat.sender === 'ai' ? -20 : 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3 }}
+                    ref={(el) => gsap.fromTo(el, { opacity: 0, x: chat.sender === 'ai' ? -20 : 20 }, { opacity: 1, x: 0, duration: 0.5 })}
                 >
                     <span
-                        className={`inline-block px-4 py-2 rounded-full max-w-xs break-words ${chat.sender === 'ai'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-green-600 text-white'
-                            }`}
+                        className={`inline-block px-4 py-2 rounded-full max-w-xs break-words ${chat.sender === 'ai' ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'}`}
                     >
                         {chat.message}
                     </span>
-                </motion.div>
+                </div>
             );
         }
     };
@@ -126,10 +126,8 @@ const RestaurantMenu = () => {
         return true;
     };
 
-    const scrollToBottom = () => {
-        if (chatEndRef.current) {
-            chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
+    const handleTabClick = (category) => {
+        setSelectedCategory(category);
     };
 
     if (!restaurant) {
@@ -137,107 +135,59 @@ const RestaurantMenu = () => {
     }
 
     return (
-        <div className="bg-gray-900 text-white min-h-screen p-8 relative">
+        <div className="bg-[#292929] text-white min-h-screen p-8 relative">
+            <h1 className="text-4xl mb-6">Welcome to {restaurant.name}</h1>
+
             {/* Chat Toggle Button */}
-            <motion.button
+            <button
                 onClick={toggleChat}
                 className="fixed bottom-4 right-4 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
                 aria-label="Toggle Chat"
             >
                 {chatOpen ? <FiX size={24} /> : <FiMessageSquare size={24} />}
-            </motion.button>
+            </button>
 
-            {/* Chat Window */}
-            <AnimatePresence>
-                {chatOpen && (
-                    <motion.div
-                        className="fixed bottom-16 right-4 bg-gray-800 text-white w-96 max-w-full h-96 rounded-lg shadow-lg flex flex-col overflow-hidden"
-                        initial={{ opacity: 0, scale: 0.8, y: 50 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.8, y: 50 }}
-                        transition={{ duration: 0.3 }}
+            {/* Menu Tabs */}
+            <div className="menu-tabs mx-auto w-[70%] flex p-5 justify-around items-center space-x-4 mt-8 bg-[#333]">
+                {restaurant.categories.map(category => (
+                    <a
+                        href="#"
+                        key={category.id}
+                        className={`menu-tab-item ${selectedCategory === category.name ? 'text-[#C19D60] selected' : ''}`}
+                        onClick={() => handleTabClick(category.name)}
                     >
-                        {/* Chat Header */}
-                        <div className="flex items-center justify-between p-4 bg-gray-700">
-                            <h2 className="text-lg font-semibold">Chat with us</h2>
-                            <button onClick={toggleChat} aria-label="Close Chat">
-                                <FiX size={20} />
-                            </button>
-                        </div>
-
-                        {/* Chat Messages */}
-                        <div className="flex-1 p-4 overflow-y-auto">
-                            {chatResponses.map((chat, index) => renderChatMessage(chat, index))}
-                            {isLoading && (
-                                <motion.div
-                                    className="flex items-center space-x-2 mt-2"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.2, duration: 0.5 }}
-                                >
-                                    <div className="w-3 h-3 bg-white rounded-full animate-bounce"></div>
-                                    <div className="w-3 h-3 bg-white rounded-full animate-bounce delay-200"></div>
-                                    <div className="w-3 h-3 bg-white rounded-full animate-bounce delay-400"></div>
-                                </motion.div>
-                            )}
-                            <div ref={chatEndRef} />
-                        </div>
-
-                        {/* Chat Input */}
-                        <div className="p-4 border-t border-gray-700 bg-gray-700">
-                            <div className="flex">
-                                <input
-                                    type="text"
-                                    value={userMessage}
-                                    onChange={(e) => setUserMessage(e.target.value)}
-                                    className="flex-1 p-2 bg-gray-600 text-white rounded-l-full focus:outline-none placeholder-gray-300"
-                                    placeholder="Type your message..."
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            handleSendMessage();
-                                        }
-                                    }}
-                                    aria-label="Type your message"
-                                />
-                                <button
-                                    onClick={handleSendMessage}
-                                    className="bg-blue-600 px-4 py-2 rounded-r-full hover:bg-blue-700 transition-colors flex items-center justify-center"
-                                    aria-label="Send Message"
-                                >
-                                    <FiSend size={20} />
-                                </button>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        {category.name}
+                    </a>
+                ))}
+            </div>
 
             {/* Restaurant Content */}
-            <h1 className="text-4xl mb-6">Welcome to {restaurant.name}</h1>
             {restaurant.categories.map(category => (
-                <div key={category.id} className="mb-8">
-                    <h2 className="text-2xl mb-4">{category.name}</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {category.meals.map(meal => (
-                            <motion.div
-                                key={meal.id}
-                                className="bg-gray-800 p-6 rounded-lg shadow hover:bg-gray-700 transition-colors"
-                                whileHover={{ scale: 1.05 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <h3 className="text-xl font-semibold">{meal.name}</h3>
-                                <p className="text-sm mt-2">{meal.description}</p>
-                                <div className="mt-4 flex justify-between items-center">
-                                    <span>Size: {meal.size}</span>
-                                    <span className="font-bold">${meal.cost}</span>
+                selectedCategory === category.name && (
+                    <div
+                        key={category.id}
+                        className="mb-8"
+                        ref={(el) => gsap.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.5 })}
+                    >
+                        <h2 className="text-2xl mb-4">{category.name}</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {category.meals.map(meal => (
+                                <div
+                                    key={meal.id}
+                                    className="meal-item bg-[#333] p-6 rounded-lg shadow hover:bg-gray-700 transition-colors"
+                                    ref={(el) => gsap.fromTo(el, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 })}
+                                >
+                                    <h3 className="text-xl font-semibold">{meal.name}</h3>
+                                    <p className="text-sm mt-2">{meal.description}</p>
+                                    <div className="mt-4 flex justify-between items-center">
+                                        <span>Size: {meal.size}</span>
+                                        <span className="font-bold">${meal.cost}</span>
+                                    </div>
                                 </div>
-                            </motion.div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
+                )
             ))}
         </div>
     );
