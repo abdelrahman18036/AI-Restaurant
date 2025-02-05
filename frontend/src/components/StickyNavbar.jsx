@@ -17,7 +17,7 @@ const StickyNavbar = () => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
             
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            if (currentScrollY > lastScrollY && currentScrollY > 20) {
                 // Scrolling Down
                 setIsScrolledDown(true);
             } else {
@@ -46,12 +46,12 @@ const StickyNavbar = () => {
             <a href="#" className="hover:text-[#C19D60] transition">Branches</a>
             <a href="#" className="hover:text-[#C19D60] transition">About</a>
             <Tooltip text="Favorites">
-                <span className='border-l-[1px] transform transition duration-200 hover:text-[#C19D60] border-[#C19D60] p-4 m-0 flex justify-center items-center cursor-pointer'>
+                <span className='border-l-[1px] transform transition duration-200 hover:text-[#C19D60] border-[#ffffff14] p-4 m-0 flex justify-center items-center cursor-pointer'>
                     <i className="fa-solid fa-star text-[20px] h"></i>
                 </span>
             </Tooltip>
             <Tooltip text="Share">
-                <span className='border-l-[1px] transform transition duration-200 hover:text-[#C19D60] border-[#C19D60] p-4  m-0 flex justify-center items-center cursor-pointer'>
+                <span className='border-l-[1px] transform transition duration-200 hover:text-[#C19D60] border-[#ffffff14] p-4  m-0 flex justify-center items-center cursor-pointer'>
                     <i className="fa-solid fa-share-from-square text-[20px]"></i>
                 </span>
             </Tooltip>

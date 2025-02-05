@@ -40,3 +40,56 @@
     transform: translateX(50%);
     transition: opacity 0.3s ease;
 }
+
+.hero{
+    background-image: url('https://restabook.kwst.net/dark/images/bg/12.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+
+
+    background-attachment: fixed !important;
+
+
+}
+.hero .overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: -1;
+}
+.seperatedDots::after{
+    content: '\25CF\25CF\25CF\25CF\25CF\25CF';
+    color: #C19D60;
+    font-size: 7px;
+    letter-spacing: 4px;
+
+}
+
+/* Slim scrollbar */
+::-webkit-scrollbar {
+    width: 8px;  /* Adjust the width to make it slimmer */
+    height: 8px; /* For horizontal scrollbar */
+    background-color: #292929;
+  }
+  
+  /* Scrollbar track */
+
+  /* Scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+    background: #C19D60;  /* Color of the scrollbar */
+    border-radius: 10px;  /* Optional: for rounded corners */
+  }
+  
+  /* Optional: Scrollbar thumb on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #A78F4A;  /* Slightly darker shade on hover */
+  }
+  

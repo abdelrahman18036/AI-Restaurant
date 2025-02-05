@@ -2,7 +2,7 @@ import React from 'react';
 
 const SmallNav = ({ restaurant }) => {
     return (
-        <div className='flex justify-between items-center p-3 pt-0'>
+        <div className='flex justify-between items-center p-3 px-5 absolute top-0 z-10 w-full'>
             <div className="language">
                 <a href="#" className="text-[#C19D60] text-[12px]">EN</a>
                 <span className='text-[#fff] text-[12px] mx-2'> / </span>
