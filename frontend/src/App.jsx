@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<h1>TESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSST</h1>} />
+        <Route path="/" element={<MenuLoadingScreen />} />
         <Route path="/:restaurantName" element={<RestaurantMenu />} />
         <Route path="/loading" element={<MenuLoadingScreen />} />
       </Routes>

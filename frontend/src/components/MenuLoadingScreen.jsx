@@ -18,7 +18,7 @@ const FoodEmojiLoader = ({ onComplete }) => {
           height: 0,
           duration: 1,
           ease: "power2.inOut",
-          onComplete: onComplete, // Trigger onComplete when the collapsing is done
+          onComplete: onComplete,
         });
       }
     }, 100); // Adjust this for how fast you want each emoji to appear (in ms)

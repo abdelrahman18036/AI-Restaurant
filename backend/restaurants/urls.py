@@ -12,3 +12,4 @@ urlpatterns = [
     path('restaurants/<str:name>/', RestaurantDetailAPIView.as_view(), name='restaurant-detail'),
     path('ai-recommendation/', AIRecommendationAPIView.as_view(), name='ai-recommendation'),  # New endpoint
 ]
+

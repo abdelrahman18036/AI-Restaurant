@@ -57,12 +57,15 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
+    "http://localhost:3000", 
+    "http://localhost:5173", 
 ]
 
 
 ROOT_URLCONF = 'restaurant_project.urls'
+MEDIA_URL = '/media/'
 
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 
 
 
