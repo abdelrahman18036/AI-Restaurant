@@ -8,6 +8,7 @@ import Register from './components/dashboard/Register.jsx';
 import SideBar from './components/dashboard/SideBar.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Modal from './components/dashboard/Modal.jsx';
+import Setting from './components/dashboard/Setting.jsx';
 function App() {
   return (
     <Router>
@@ -20,6 +21,7 @@ function App() {
         <Route path="/side" element={<SideBar />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/modal" element={<Modal />} />
+        <Route path="/setting" element={<Setting />} />
         </Routes>
     </Router>
   );

@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { ChartBarStacked, House, Settings, Utensils, X } from 'lucide-react';
 import Items from './Items';
+import Categories from './Categories';
+import Restraunt from './Restraunt';
+import { Link } from 'react-router-dom';
 
 const SideBar = () => {
   const [selectedTab, setSelectedTab] = useState('restaurant');
@@ -47,7 +50,7 @@ const SideBar = () => {
         <div className="px-4 pb-6">
           <li className="flex items-center space-x-3 hover:bg-[#222222] p-3 rounded-lg transition-colors duration-200 cursor-pointer group">
             <Settings size={20} className="text-white group-hover:text-[#f8cb78]" />
-            <span className="text-lg">Settings</span>
+            <Link to="/setting" className="text-lg"><span className="text-lg">Settings</span></Link>
           </li>
         </div>
 
@@ -55,8 +58,8 @@ const SideBar = () => {
 
       {/* Main Content Area */}
       <main className="col-span-6 p-10 bg-[#212121] text-white">
-        {selectedTab === 'restaurant' && <h1 className="text-3xl font-semibold">Your Restaurant</h1>}
-        {selectedTab === 'categories' && <h1 className="text-3xl font-semibold">Your Categories</h1>}
+        {selectedTab === 'restaurant' && <Restraunt />}
+        {selectedTab === 'categories' && <Categories />}
         {selectedTab === 'items' && <Items />}
       </main>
     </div>
