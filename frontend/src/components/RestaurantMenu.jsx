@@ -1,4 +1,3 @@
-// RestaurantMenu.jsx
 import React, { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import StickyNavbar from "./StickyNavbar";
@@ -6,7 +5,6 @@ import SmallHeader from "./SmallHeader";
 import Hero from "./Hero";
 import MenuLoadingScreen from "./MenuLoadingScreen";
 import ChatPopup from "./ChatPopup";
-import { useParams } from "react-router-dom";
 
 const RestaurantMenu = () => {
   const [restaurant, setRestaurant] = useState(null);
@@ -14,26 +12,61 @@ const RestaurantMenu = () => {
   const [loading, setLoading] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const menuRef = useRef(null);
-  const { restaurantName } = useParams();
 
-  const fetchRestaurantData = async () => {
-    try {
-      let url = `http://127.0.0.1:8000/api/restaurants/${restaurantName}/`;
-      const response = await fetch(url);
-      const data = await response.json();
-      setRestaurant(data);
-      if (!selectedCategory && data.categories && data.categories.length > 0) {
-        setSelectedCategory(data.categories[0].name);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  // Static data to replace API fetch
+  const staticRestaurantData = {
+    name: "Tasty Bistro",
+    categories: [
+      {
+        id: 1,
+        name: "Starters",
+        meals: [
+          {
+            id: 1,
+            name: "Spring Rolls",
+            description: "Crispy rolls filled with vegetables.",
+            cost: 5.99,
+            image: "https://via.placeholder.com/150",
+          },
+          {
+            id: 2,
+            name: "Garlic Bread",
+            description: "Toasted bread with garlic and herbs.",
+            cost: 3.49,
+            image: "https://via.placeholder.com/150",
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: "Mains",
+        meals: [
+          {
+            id: 3,
+            name: "Grilled Chicken",
+            description: "Juicy grilled chicken with herbs and spices.",
+            cost: 12.99,
+            image: "https://via.placeholder.com/150",
+          },
+          {
+            id: 4,
+            name: "Pasta Carbonara",
+            description: "Creamy pasta with bacon and parmesan.",
+            cost: 11.49,
+            image: "https://via.placeholder.com/150",
+          },
+        ],
+      },
+    ],
   };
 
   useEffect(() => {
-    fetchRestaurantData();
+    // Set static data
+    setRestaurant(staticRestaurantData);
+    if (!selectedCategory && staticRestaurantData.categories && staticRestaurantData.categories.length > 0) {
+      setSelectedCategory(staticRestaurantData.categories[0].name);
+    }
+    setLoading(false);
   }, []);
 
   const handleTabClick = (category) => {
@@ -62,8 +95,7 @@ const RestaurantMenu = () => {
         {restaurant?.categories?.map((category) => (
           <a
             key={category.id}
-            className={`cursor-pointer menu-tab-item ${selectedCategory === category.name ? "text-[#C19D60] selected" : ""
-              }`}
+            className={`cursor-pointer menu-tab-item ${selectedCategory === category.name ? "text-[#C19D60] selected" : ""}`}
             onClick={() => handleTabClick(category.name)}
           >
             {category.name}
@@ -119,7 +151,7 @@ const RestaurantMenu = () => {
         Ask your AI assistant
       </button>
       {showChat && (
-        <ChatPopup onClose={() => setShowChat(false)} restaurantName={restaurantName} />
+        <ChatPopup onClose={() => setShowChat(false)} restaurantName={restaurant.name} />
       )}
     </div>
   );
