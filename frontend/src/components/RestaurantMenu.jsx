@@ -24,23 +24,16 @@ const RestaurantMenu = () => {
           {
             id: 1,
             name: "Spring Rolls",
-            description: "Crispy rolls filled with fresh vegetables.",
+            description: "Crispy rolls filled with vegetables.",
             cost: 5.99,
-            image: "https://source.unsplash.com/400x300/?spring-rolls",
+            image: "https://via.placeholder.com/150",
           },
           {
             id: 2,
             name: "Garlic Bread",
-            description: "Toasted bread infused with garlic and herbs.",
+            description: "Toasted bread with garlic and herbs.",
             cost: 3.49,
-            image: "https://source.unsplash.com/400x300/?garlic-bread",
-          },
-          {
-            id: 3,
-            name: "Bruschetta",
-            description: "Grilled bread topped with tomatoes, garlic, and basil.",
-            cost: 6.99,
-            image: "https://source.unsplash.com/400x300/?bruschetta",
+            image: "https://via.placeholder.com/150",
           },
         ],
       },
@@ -49,71 +42,23 @@ const RestaurantMenu = () => {
         name: "Mains",
         meals: [
           {
-            id: 4,
+            id: 3,
             name: "Grilled Chicken",
-            description: "Juicy grilled chicken seasoned with herbs and spices.",
+            description: "Juicy grilled chicken with herbs and spices.",
             cost: 12.99,
-            image: "https://source.unsplash.com/400x300/?grilled-chicken",
+            image: "https://via.placeholder.com/150",
           },
           {
-            id: 5,
+            id: 4,
             name: "Pasta Carbonara",
-            description: "Creamy pasta with crispy bacon and parmesan cheese.",
+            description: "Creamy pasta with bacon and parmesan.",
             cost: 11.49,
-            image: "https://source.unsplash.com/400x300/?pasta",
-          },
-          {
-            id: 6,
-            name: "Salmon Teriyaki",
-            description: "Grilled salmon glazed with teriyaki sauce.",
-            cost: 15.99,
-            image: "https://source.unsplash.com/400x300/?salmon",
-          },
-        ],
-      },
-      {
-        id: 3,
-        name: "Desserts",
-        meals: [
-          {
-            id: 7,
-            name: "Chocolate Lava Cake",
-            description: "Rich chocolate cake with a molten center.",
-            cost: 7.99,
-            image: "https://source.unsplash.com/400x300/?chocolate-cake",
-          },
-          {
-            id: 8,
-            name: "Tiramisu",
-            description: "Classic Italian dessert with layers of coffee-soaked sponge.",
-            cost: 6.99,
-            image: "https://source.unsplash.com/400x300/?tiramisu",
-          },
-        ],
-      },
-      {
-        id: 4,
-        name: "Drinks",
-        meals: [
-          {
-            id: 9,
-            name: "Fresh Lemonade",
-            description: "Refreshing homemade lemonade.",
-            cost: 3.99,
-            image: "https://source.unsplash.com/400x300/?lemonade",
-          },
-          {
-            id: 10,
-            name: "Cappuccino",
-            description: "Hot cappuccino with rich frothy milk.",
-            cost: 4.99,
-            image: "https://source.unsplash.com/400x300/?cappuccino",
+            image: "https://via.placeholder.com/150",
           },
         ],
       },
     ],
   };
-  
 
   useEffect(() => {
     // Set static data
