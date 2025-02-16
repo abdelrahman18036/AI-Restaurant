@@ -5,8 +5,8 @@ from .models import Restaurant, Category, Meal
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ('name', 'admin')
-    search_fields = ('name', 'admin__username')
+    list_display = ('name', 'admin', 'location', 'contact', 'hours')
+    search_fields = ('name', 'admin__username', 'location', 'contact')
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -16,4 +16,4 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Meal)
 class MealAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'size', 'cost')
-    search_fields = ('name', 'category__name')
+    search_fields = ('name', 'category__name', 'description')

@@ -5,6 +5,8 @@ import SmallHeader from "./SmallHeader";
 import Hero from "./Hero";
 import MenuLoadingScreen from "./MenuLoadingScreen";
 import ChatPopup from "./ChatPopup";
+import { fetchRestaurant } from "../api";
+import { useParams } from "react-router-dom";
 
 const RestaurantMenu = () => {
   const [restaurant, setRestaurant] = useState(null);
@@ -12,62 +14,28 @@ const RestaurantMenu = () => {
   const [loading, setLoading] = useState(true);
   const [showChat, setShowChat] = useState(false);
   const menuRef = useRef(null);
+  // add from   params to get restaurant name
+  const { restaurantName } = useParams();
 
-  // Static data to replace API fetch
-  const staticRestaurantData = {
-    name: "Tasty Bistro",
-    categories: [
-      {
-        id: 1,
-        name: "Starters",
-        meals: [
-          {
-            id: 1,
-            name: "Spring Rolls",
-            description: "Crispy rolls filled with vegetables.",
-            cost: 5.99,
-            image: "https://via.placeholder.com/150",
-          },
-          {
-            id: 2,
-            name: "Garlic Bread",
-            description: "Toasted bread with garlic and herbs.",
-            cost: 3.49,
-            image: "https://via.placeholder.com/150",
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: "Mains",
-        meals: [
-          {
-            id: 3,
-            name: "Grilled Chicken",
-            description: "Juicy grilled chicken with herbs and spices.",
-            cost: 12.99,
-            image: "https://via.placeholder.com/150",
-          },
-          {
-            id: 4,
-            name: "Pasta Carbonara",
-            description: "Creamy pasta with bacon and parmesan.",
-            cost: 11.49,
-            image: "https://via.placeholder.com/150",
-          },
-        ],
-      },
-    ],
-  };
+
+
 
   useEffect(() => {
-    // Set static data
-    setRestaurant(staticRestaurantData);
-    if (!selectedCategory && staticRestaurantData.categories && staticRestaurantData.categories.length > 0) {
-      setSelectedCategory(staticRestaurantData.categories[0].name);
-    }
-    setLoading(false);
-  }, []);
+    const loadRestaurant = async () => {
+      const data = await fetchRestaurant(restaurantName);
+      if (!data.error) {
+        setRestaurant(data);
+        if (data.categories && data.categories.length > 0) {
+          setSelectedCategory(data.categories[0].name);
+        }
+      } else {
+        console.error("Error loading restaurant", data.error);
+      }
+      setLoading(false);
+    };
+
+    loadRestaurant();
+  }, [restaurantName]);
 
   const handleTabClick = (category) => {
     if (selectedCategory !== category) {
