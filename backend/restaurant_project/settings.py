@@ -27,8 +27,11 @@ SECRET_KEY = 'django-insecure-u#34%&8uz4tp_qht(%q^qnpjw@1p=l@=7wt@!m--c-l^5hhk)q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["restaurant.westeurope.cloudapp.azure.com"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://restaurant.westeurope.cloudapp.azure.com",
+]
 
 # Application definition
 
@@ -39,22 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
     'restaurants',  
+    'rest_framework',  
     'corsheaders', 
 ]
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
-
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  
@@ -66,12 +57,21 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000", 
     "http://localhost:5173", 
-    "http://localhost:5174",
+    "restaurant.westeurope.cloudapp.azure.com",
 ]
 
 
@@ -80,7 +80,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 
-
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 
